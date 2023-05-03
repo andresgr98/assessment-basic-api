@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Service;
+namespace App\Domain;
 
-use SimpleXMLElement;
+use App\Infrastructure\Service\XmlRequest;
 
 class PingRequestCreator extends RequestCreator
 {
@@ -11,7 +11,7 @@ class PingRequestCreator extends RequestCreator
     {
     }
 
-    function createRequest(SimpleXMLElement $xml): RequestInterface
+    function createRequest(XmlRequest $xml): RequestInterface
     {
         return new PingRequest($xml);
     }

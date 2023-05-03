@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Service;
+namespace App\Infrastructure\Service;
 
+use App\Infrastructure\Exception\XmlValidationException;
 use DOMDocument;
 
 class XmlValidatorService
 {
 
-    private static $instance = null;
+    private static ?XmlValidatorService $instance = null;
 
     private function __construct()
     {
@@ -22,17 +23,14 @@ class XmlValidatorService
         return self::$instance;
     }
 
-    public function validate(string $xml, string $xsdPath): bool
+    public function validate(string $xml, string $xsdPath): void
     {
         libxml_use_internal_errors(true);
 
         $dom = new DOMDocument('1.0');
         $dom->loadXML($xml, LIBXML_NOERROR);
-
-        if ($dom->schemaValidate($xsdPath)) {
-            return true;
+        if (!$dom->schemaValidate($xsdPath)) {
+           throw new XmlValidationException("Could not validate XML");
         }
-
-        return false;
     }
 }

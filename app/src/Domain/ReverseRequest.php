@@ -1,28 +1,31 @@
 <?php
 
-namespace App\Service;
+namespace App\Domain;
 
+use App\Infrastructure\Service\XmlRequest;
 use SimpleXMLElement;
 
 class ReverseRequest implements RequestInterface
 {
-    public function __construct(SimpleXMLElement $xml)
+    public function __construct(XmlRequest $xml)
     {
         $this->xml = $xml;
     }
 
-    public function validateRequestXml(): bool
+    public function validateRequestXml(): void
     {
-        return $this->xml;
+        //TODO: implement
     }
 
     public function validateResponseXml(): bool
     {
-        return $this->xml;
+        //TODO: implement
+        return true;
     }
 
     public function generateResponse(): string
     {
+        //TODO: implement
         return 'reverse_response';
     }
 

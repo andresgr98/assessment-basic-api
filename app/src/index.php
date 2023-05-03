@@ -1,13 +1,16 @@
 <?php
-error_reporting(E_ERROR | E_PARSE);
-include '../../init.php';
-
-use App\Core\Container;
-use App\Service\PingRequestCreator;
-use App\Service\ReverseRequestCreator;
-use App\Service\XmlValidatorService;
-
 require_once __DIR__ . '/../vendor/autoload.php';
+error_reporting(E_ERROR | E_PARSE);
+
+//TODO: fix this include
+//include '../../init.php';
+
+use App\Domain\PingRequestCreator;
+use App\Domain\ReverseRequestCreator;
+use App\Infrastructure\Container;
+use App\Infrastructure\Service\XmlRequest;
+use App\Infrastructure\Service\XmlValidatorService;
+
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 
@@ -16,21 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     throw new Exception("Invalid HTTP Method. Only POST allowed.");
 }
 
-var_dump(file_get_contents(ROOT_DIR . "/files/xsds/ping_request.xsd"));
-
 $container = new Container();
 $container->addService('XmlValidatorService', XmlValidatorService::getInstance());
 
-function getContainer()
-{
-    global $container;
-    return $container;
-}
-
 $xml = file_get_contents("php://input");
-$xmlRequest = simplexml_load_string($xml);
+$xmlRequest = new XmlRequest($xml);
 
-$endpoint = (string) $xmlRequest->header->type;
+$endpoint = (string) $xmlRequest->getXmlObject()->header->type;
 
 $requestCreator = match ($endpoint) {
     'ping_request' => new PingRequestCreator(),
@@ -43,3 +38,9 @@ $response = $request->generateResponse();
 
 echo $response;
 exit();
+
+function getContainer(): Container
+{
+    global $container;
+    return $container;
+}

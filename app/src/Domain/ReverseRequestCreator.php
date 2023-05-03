@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Service;
+namespace App\Domain;
 
-use SimpleXMLElement;
+
+use App\Infrastructure\Service\XmlRequest;
 
 class ReverseRequestCreator extends RequestCreator
 {
@@ -10,7 +11,7 @@ class ReverseRequestCreator extends RequestCreator
     public function __construct()
     {
     }
-    function createRequest(SimpleXMLElement $xml): RequestInterface
+    function createRequest(XmlRequest $xml): RequestInterface
     {
         return new ReverseRequest($xml);
     }
