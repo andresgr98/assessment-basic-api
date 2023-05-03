@@ -2,8 +2,7 @@
 
 namespace App\Domain;
 
-use App\Infrastructure\Service\XmlRequest;
-use SimpleXMLElement;
+use App\Infrastructure\XmlRequest;
 
 class ReverseRequest implements RequestInterface
 {

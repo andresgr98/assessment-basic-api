@@ -3,7 +3,7 @@
 namespace App\Domain;
 
 use App\Infrastructure\Exception\XmlValidationException;
-use App\Infrastructure\Service\XmlRequest;
+use App\Infrastructure\XmlRequest;
 use SimpleXMLElement;
 
 class PingRequest implements RequestInterface

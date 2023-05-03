@@ -2,7 +2,7 @@
 
 namespace App\Domain;
 
-use App\Infrastructure\Service\XmlRequest;
+use App\Infrastructure\XmlRequest;
 
 class PingRequestCreator extends RequestCreator
 {

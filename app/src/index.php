@@ -5,11 +5,10 @@ error_reporting(E_ERROR | E_PARSE);
 //TODO: fix this include
 //include '../../init.php';
 
-use App\Domain\PingRequestCreator;
-use App\Domain\ReverseRequestCreator;
+use App\Application\ApplicationController;
 use App\Infrastructure\Container;
-use App\Infrastructure\Service\XmlRequest;
 use App\Infrastructure\Service\XmlValidatorService;
+use App\Infrastructure\XmlRequest;
 
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
@@ -22,25 +21,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $container = new Container();
 $container->addService('XmlValidatorService', XmlValidatorService::getInstance());
 
-$xml = file_get_contents("php://input");
-$xmlRequest = new XmlRequest($xml);
-
-$endpoint = (string) $xmlRequest->getXmlObject()->header->type;
-
-$requestCreator = match ($endpoint) {
-    'ping_request' => new PingRequestCreator(),
-    'reverse_request' => new ReverseRequestCreator(),
-    default => throw new Exception("No endpoint specified"),
-};
-
-$request = $requestCreator->createRequest($xmlRequest);
-$response = $request->generateResponse();
-
-echo $response;
-exit();
+$request = getRequest();
+$application = new ApplicationController();
+$application->handle($request);
 
 function getContainer(): Container
 {
     global $container;
     return $container;
+}
+
+function getRequest(): XmlRequest
+{
+    $xml = file_get_contents("php://input");
+    return new XmlRequest($xml);
 }

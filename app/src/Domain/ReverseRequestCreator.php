@@ -3,7 +3,7 @@
 namespace App\Domain;
 
 
-use App\Infrastructure\Service\XmlRequest;
+use App\Infrastructure\XmlRequest;
 
 class ReverseRequestCreator extends RequestCreator
 {
